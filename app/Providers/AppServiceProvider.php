@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Builders\CustomerBuilder;
+use App\Http\Controllers\Api\CustomerController;
+use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +25,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
     }
 }

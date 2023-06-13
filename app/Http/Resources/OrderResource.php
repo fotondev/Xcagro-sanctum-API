@@ -26,6 +26,8 @@ class OrderResource extends JsonResource
                 'total_price' => $this->total_price,
                 'customer_id' => $this->customer_id,
                 'shipment_id' => $this->shipment_id,
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
             ],
             'relationships' => [
                 'customer' => [

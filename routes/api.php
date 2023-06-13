@@ -1,13 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\BookController as ApiBookController;
-use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\CustomerController;
+use App\Http\Controllers\Api\v1\OrderController;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\v1\TokenController;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
@@ -34,7 +32,7 @@ Route::group(['middleware' => config('fortify.middleware', ['auth:sanctum'])], f
     Route::get('/user', [AuthController::class, 'me']);
 
     //Customers and Orders
-    Route::prefix('/customers')->group(function () {
+    Route::prefix('customers')->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
         Route::get('/{customer}', [CustomerController::class, 'show'])->name('customer.show');
         Route::post('/', [CustomerController::class, 'store'])->name('customer.store');
@@ -56,12 +54,15 @@ Route::group(['middleware' => config('fortify.middleware', ['auth:sanctum'])], f
         Route::post('/', [OrderController::class, 'store'])->name('order.store');
         Route::put('/{order}', [OrderController::class, 'update'])->name('order.update');
         Route::delete('/{order}', [OrderController::class, 'destroy'])->name('order.delete');
+        Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+
+        Route::prefix('cargos')->group(function () {
+            Route::get('/{order}', [OrderController::class, 'show'])->name('order.show');
+            Route::post('/', [OrderController::class, 'store'])->name('order.store');
+            Route::put('/{order}', [OrderController::class, 'update'])->name('order.update');
+            Route::delete('/{order}', [OrderController::class, 'destroy'])->name('order.delete');
+        });
     });
-
-
-
-
-
 
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
