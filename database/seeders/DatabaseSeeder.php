@@ -19,9 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-
-        Role::create(['name' => 'admin']);
+  
         Role::create(['name' => 'manager']);
 
         User::create([
@@ -31,8 +29,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('pwdpwd'),
         ]);
 
-
-
-        Order::factory(5)->create();
+        Customer::factory(2)->create();
+        // Order::factory(5)->create();
     }
 }

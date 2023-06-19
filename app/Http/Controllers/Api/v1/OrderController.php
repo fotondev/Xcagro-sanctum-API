@@ -9,6 +9,7 @@ use App\Http\Requests\OrdersListRequest;
 use App\Http\Resources\orderResource;
 use App\Http\Requests\StoreorderRequest;
 use App\Http\Requests\UpdateorderRequest;
+use App\Services\OrderService;
 
 class OrderController extends Controller
 {
@@ -36,7 +37,7 @@ class OrderController extends Controller
             ->setStatusCode(200);
     }
 
-    public function show(Customer $customer, Order $order)
+    public function show(Order $order)
     {
         return (new OrderResource($order))
             ->response()
@@ -55,36 +56,26 @@ class OrderController extends Controller
             ->setStatusCode(200);
     }
 
-    // public function showByCustomer(Request $request, Customer $customer, order $order)
-    // {
-    //     $order = order::query()
-    //         ->where('customer_id', $customer->id)
-    //         ->with('customer', 'shipment')
-    //         ->paginate($request->input('per_page', 10));
 
-    //     return (new orderResource($order))
-    //         ->response()
-    //         ->setStatusCode(200);
-    // }
-
-    public function store(StoreorderRequest $request)
+    public function store(StoreorderRequest $request, OrderService $service)
     {
-        $order = order::create($request->validated());
-        return (new orderResource($order))
+        $order = $service->execute( $request->validated());
+      
+        return (new OrderResource($order))
             ->response()
             ->setStatusCode(201);
     }
 
-    public function update(UpdateorderRequest $request, order $order)
+    public function update(UpdateorderRequest $request, Order $order)
     {
 
         $order->update($request->validated());
-        return (new orderResource($order))
+        return (new OrderResource($order))
             ->response()
             ->setStatusCode(201);
     }
 
-    public function destroy(order $order)
+    public function destroy(Order $order)
     {
         $order->delete();
         return response()->json(null, 204);

@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\v1\Admin\DeleteUser;
+use App\Http\Controllers\Api\v1\Admin\EditUser;
+use App\Http\Controllers\Api\v1\Admin\ListUsers;
+use App\Http\Controllers\Api\v1\Admin\ShowUser;
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\CargoController;
 use App\Http\Controllers\Api\v1\CustomerController;
 use App\Http\Controllers\Api\v1\OrderController;
 use Laravel\Fortify\Features;
@@ -54,15 +59,29 @@ Route::group(['middleware' => config('fortify.middleware', ['auth:sanctum'])], f
         Route::post('/', [OrderController::class, 'store'])->name('order.store');
         Route::put('/{order}', [OrderController::class, 'update'])->name('order.update');
         Route::delete('/{order}', [OrderController::class, 'destroy'])->name('order.delete');
-        Route::get('/', [OrderController::class, 'index'])->name('orders.index');
 
-        Route::prefix('cargos')->group(function () {
-            Route::get('/{order}', [OrderController::class, 'show'])->name('order.show');
-            Route::post('/', [OrderController::class, 'store'])->name('order.store');
-            Route::put('/{order}', [OrderController::class, 'update'])->name('order.update');
-            Route::delete('/{order}', [OrderController::class, 'destroy'])->name('order.delete');
+        //Cargos
+        Route::prefix('/{order}/cargos')->group(function () {
+            Route::get('/', [CargoController::class, 'index'])->name('cargo.index');
+            Route::get('/{cargo?}', [CargoController::class, 'show'])->name('cargo.show');
+            Route::post('/', [CargoController::class, 'store'])->name('cargo.store');
+            Route::put('/{cargo}', [CargoController::class, 'update'])->name('cargo.update');
+            Route::delete('/{cargo}', [CargoController::class, 'destroy'])->name('cargo.delete');
         });
     });
+
+
+    //Users
+    Route::prefix('/admin/users')->middleware('role:admin')->group(function () {
+        Route::get('/', ListUsers::class);
+        Route::get('/{user}', ShowUser::class);
+        Route::post('/', [RegisteredUserController::class, 'store']);
+        Route::put('/{user}', EditUser::class);
+        Route::delete('/{user}', DeleteUser::class);
+    });
+
+
+
 
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
@@ -123,9 +142,5 @@ Route::middleware(['guest:' . config('fortify.guard')])->group(function () {
             ->name('password.email');
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
             ->name('password.update');
-    }
-    //Registration
-    if (Features::enabled(Features::registration())) {
-        Route::post('/register', [RegisteredUserController::class, 'store']);
     }
 });

@@ -4,13 +4,11 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\CustomerResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class CargoResource extends JsonResource
 {
-
-    public static $wrap = 'orders';
+    public static $wrap = 'cargos';
     /**
      * Transform the resource into an array.
      *
@@ -21,26 +19,30 @@ class OrderResource extends JsonResource
         return [
             'attributes' => [
                 'id' => $this->id,
-                'order_number' => $this->order_number,
-                'status' => $this->status,
-                'total_price' => $this->total_price,
-                'customer_id' => $this->customer_id,
+                'name' => $this->name,
+                'description' => $this->description,
+                'weight' => $this->weight,
+                'quantity' => $this->quantity,
+                'order_id' => $this->order_id,
                 'shipment_id' => $this->shipment_id,
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
             ],
             'relationships' => [
-                'customer' => [
+                'order' => [
                     'data' => [
-                        'id' => $this->customer->id
-                    ],            
+                        'id' => $this->order->id
+                    ],
                 ],
-                'cargos' => CargoResource::collection($this->cargos)
+                'shipment' => [
+                    'data' => [
+                        'id' => $this->shipment->id ?? null
+                    ]
+                ],
             ],
             'links' => [
-                'self' => route('order.show', $this->id)
+                'self' => route('cargo.show', $this->id)
             ]
-
         ];
     }
 

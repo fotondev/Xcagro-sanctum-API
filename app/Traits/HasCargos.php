@@ -14,9 +14,8 @@ trait HasCargos
         return $this->hasMany(Cargo::class);
     }
 
-    public function assignOrder(Cargo $cargo)
+    public function assignCargo(Cargo $cargo)
     {
-        $this->cargos()->associate($cargo);
-        $this->save();
+        $this->cargos()->save($cargo);
     }
 }

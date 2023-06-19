@@ -7,5 +7,8 @@ use App\Http\Controllers\Controller;
 
 class ShipmentController extends Controller
 {
-    //
+    public function store(): void
+    {
+        # code...
+    }
 }

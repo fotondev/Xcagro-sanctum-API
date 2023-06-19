@@ -25,8 +25,8 @@ class OrdersListRequest extends FormRequest
         return [
             'priceFrom' => 'numeric',
             'priceTo' => 'numeric',
-            'dateFrom' => 'date',
-            'dateTo' => 'date',
+            'dateFrom' => 'dateTime',
+            'dateTo' => 'dateTime',
             'sortBy' => Rule::in(['status', 'total_price']),
             'sortOrder' => Rule::in(['asc', 'desc']),
         ];

@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cargos', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
-            $table->text('decription');
-            $table->unsignedFloat('weight');
+            $table->text('description')->nullable();
+            $table->unsignedInteger('weight');
             $table->unsignedInteger('quantity');
             $table->uuid('order_id');
-            $table->uuid('shipment_id');
+            $table->uuid('shipment_id')->nullable();
 
             $table->foreign('order_id')->references('id')->on('orders')
                 ->onUpdate('cascade')
